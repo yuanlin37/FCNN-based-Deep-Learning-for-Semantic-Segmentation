@@ -50,7 +50,7 @@ class BatchDatset:
 
         # >>> ylEdit
         if not self.__channels and len(image.shape) == 3:  # make sure images are of shape(h,w,3)
-            image = np.all(image == np.array([255, 0, 0]), axis=2)
+            image = np.all(image == np.array([255, 0, 0]), axis=2).astype(np.uint8)
         # <<< ylEdit
         if self.image_options.get("resize", False) and self.image_options["resize"]:
             resize_size = self.image_options["resize_size"]
@@ -60,8 +60,8 @@ class BatchDatset:
             resize_image = image
         str = "%05d/%05d = %02d%% : %s | %s" % (self.cnt, self.total_files, float(self.cnt)*100/self.total_files, filename, resize_image.shape)
 
-        #sys.stdout.write(str)
-        print(str)
+        sys.stdout.write('\r' + str)
+        #print(str)
         self.cnt += 1
         return np.array(resize_image)
 

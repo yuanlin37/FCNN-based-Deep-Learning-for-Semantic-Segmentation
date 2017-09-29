@@ -4,20 +4,20 @@ import numpy as np
 
 import TensorflowUtils as utils
 # >>> ylEdit
-import read_MITSceneParsingData as scene_parsing
-#import read_data_road as scene_parsing
+#import read_MITSceneParsingData as scene_parsing
+import read_data_road as scene_parsing
 # <<<
 import datetime
 import BatchDatsetReader as dataset
 from six.moves import xrange
 
 FLAGS = tf.flags.FLAGS
-tf.flags.DEFINE_integer("batch_size", "16", "batch size for training")
+tf.flags.DEFINE_integer("batch_size", "10", "batch size for training")
 tf.flags.DEFINE_string("logs_dir", "logs/", "path to logs directory")
 # >>> ylEdit
-tf.flags.DEFINE_string("data_dir", "c:/dl/Data_zoo/MIT_SceneParsing/", "path to dataset")
+#tf.flags.DEFINE_string("data_dir", "c:/dl/Data_zoo/MIT_SceneParsing/", "path to dataset")
 #tf.flags.DEFINE_string("data_dir", "c:/dl/Data_zoo/MIT/", "path to dataset")
-#tf.flags.DEFINE_string("data_dir", "c:/dl/Data_zoo/data_road/", "path to dataset")
+tf.flags.DEFINE_string("data_dir", "c:/dl/Data_zoo/data_road/", "path to dataset")
 # <<<
 tf.flags.DEFINE_float("learning_rate", "1e-5", "Learning rate for Adam Optimizer")
 tf.flags.DEFINE_string("model_dir", "c:/dl/Model_zoo/", "Path to vgg model mat")
@@ -28,9 +28,9 @@ MODEL_URL = 'http://www.vlfeat.org/matconvnet/models/beta16/imagenet-vgg-verydee
 
 MAX_ITERATION = int(1e5 + 1)
 # >>> ylEdit
-NUM_OF_CLASSESS = 151
+#NUM_OF_CLASSESS = 151
 IMAGE_SIZE = np.array([224, 224])
-#NUM_OF_CLASSESS = 2
+NUM_OF_CLASSESS = 2
 #IMAGE_SIZE = np.array([320, 1152])
 # <<<
 
@@ -159,8 +159,8 @@ def main(argv=None):
 
     pred_annotation, logits = inference(image, keep_probability)
     tf.summary.image("input_image", image, max_outputs=2)
-    tf.summary.image("ground_truth", tf.cast(annotation, tf.uint8), max_outputs=2)
-    tf.summary.image("pred_annotation", tf.cast(pred_annotation, tf.uint8), max_outputs=2)
+    tf.summary.image("ground_truth", tf.cast(annotation * 255/NUM_OF_CLASSESS, tf.uint8), max_outputs=2)
+    tf.summary.image("pred_annotation", tf.cast(pred_annotation * 255/NUM_OF_CLASSESS, tf.uint8), max_outputs=2)
     loss = tf.reduce_mean((tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits,
                                                                           labels=tf.squeeze(annotation, squeeze_dims=[3]),
                                                                           name="entropy")))

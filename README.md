@@ -1,5 +1,6 @@
-# Self-Driving_Car_Lane_Detection
+# Self-Driving Car Lane Detection
 
+## Motivation
 The purpose of this project is to investigate a type of Convolutional Neural Network (CNN), named Fully Convolutional Neural Network (FCNN), and we are going to apply this technique to the lane detection of self-driving car.
 
 ## Tutorials

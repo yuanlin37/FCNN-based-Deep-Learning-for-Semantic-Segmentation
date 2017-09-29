@@ -48,15 +48,20 @@ class BatchDatset:
         if self.__channels and len(image.shape) < 3:  # make sure images are of shape(h,w,3)
             image = np.array([image for i in range(3)])
 
+        # >>> ylEdit
+        if not self.__channels and len(image.shape) == 3:  # make sure images are of shape(h,w,3)
+            image = np.all(image == np.array([255, 0, 0]), axis=2)
+        # <<< ylEdit
         if self.image_options.get("resize", False) and self.image_options["resize"]:
-            resize_size = int(self.image_options["resize_size"])
+            resize_size = self.image_options["resize_size"]
             resize_image = misc.imresize(image,
-                                         [resize_size, resize_size], interp='nearest')
+                                         resize_size, interp='nearest')
         else:
             resize_image = image
-        str = "%06d/%06d = %02d %% : %s" % (self.cnt, self.total_files, float(self.cnt)*100/self.total_files, filename)
-        #print(str, end="\r")
-        sys.stdout.write('\r' + str)
+        str = "%05d/%05d = %02d%% : %s | %s" % (self.cnt, self.total_files, float(self.cnt)*100/self.total_files, filename, resize_image.shape)
+
+        #sys.stdout.write(str)
+        print(str)
         self.cnt += 1
         return np.array(resize_image)
 

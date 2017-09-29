@@ -60,7 +60,7 @@ def create_image_lists(image_dir):
                     image_list[directories[idx]].append(record)
                 else:
                     print("Annotation file %s not found for %s - Skipping" % (annotation_file, filename))
-                #print("Annotation file %s for %s" % (annotation_file, filename))
+                print("Annotation file %s for %s" % (annotation_file, filename))
 
         random.shuffle(image_list[directories[idx]])
         no_of_images = len(image_list[directories[idx]])

@@ -3,16 +3,23 @@ import tensorflow as tf
 import numpy as np
 
 import TensorflowUtils as utils
+# >>> ylEdit
 import read_MITSceneParsingData as scene_parsing
+#import read_data_road as scene_parsing
+# <<<
 import datetime
 import BatchDatsetReader as dataset
 from six.moves import xrange
 
 FLAGS = tf.flags.FLAGS
-tf.flags.DEFINE_integer("batch_size", "2", "batch size for training")
+tf.flags.DEFINE_integer("batch_size", "16", "batch size for training")
 tf.flags.DEFINE_string("logs_dir", "logs/", "path to logs directory")
+# >>> ylEdit
 tf.flags.DEFINE_string("data_dir", "c:/dl/Data_zoo/MIT_SceneParsing/", "path to dataset")
-tf.flags.DEFINE_float("learning_rate", "1e-4", "Learning rate for Adam Optimizer")
+#tf.flags.DEFINE_string("data_dir", "c:/dl/Data_zoo/MIT/", "path to dataset")
+#tf.flags.DEFINE_string("data_dir", "c:/dl/Data_zoo/data_road/", "path to dataset")
+# <<<
+tf.flags.DEFINE_float("learning_rate", "1e-5", "Learning rate for Adam Optimizer")
 tf.flags.DEFINE_string("model_dir", "c:/dl/Model_zoo/", "Path to vgg model mat")
 tf.flags.DEFINE_bool('debug', "False", "Debug mode: True/ False")
 tf.flags.DEFINE_string('mode', "train", "Mode train/ test/ visualize")
@@ -20,8 +27,13 @@ tf.flags.DEFINE_string('mode', "train", "Mode train/ test/ visualize")
 MODEL_URL = 'http://www.vlfeat.org/matconvnet/models/beta16/imagenet-vgg-verydeep-19.mat'
 
 MAX_ITERATION = int(1e5 + 1)
+# >>> ylEdit
 NUM_OF_CLASSESS = 151
-IMAGE_SIZE = 224
+IMAGE_SIZE = np.array([224, 224])
+#NUM_OF_CLASSESS = 2
+#IMAGE_SIZE = np.array([320, 1152])
+# <<<
+
 
 
 def vgg_net(weights, image):
@@ -142,8 +154,8 @@ def train(loss_val, var_list):
 
 def main(argv=None):
     keep_probability = tf.placeholder(tf.float32, name="keep_probabilty")
-    image = tf.placeholder(tf.float32, shape=[None, IMAGE_SIZE, IMAGE_SIZE, 3], name="input_image")
-    annotation = tf.placeholder(tf.int32, shape=[None, IMAGE_SIZE, IMAGE_SIZE, 1], name="annotation")
+    image = tf.placeholder(tf.float32, shape=[None, IMAGE_SIZE[0], IMAGE_SIZE[1], 3], name="input_image")
+    annotation = tf.placeholder(tf.int32, shape=[None, IMAGE_SIZE[0], IMAGE_SIZE[1], 1], name="annotation")
 
     pred_annotation, logits = inference(image, keep_probability)
     tf.summary.image("input_image", image, max_outputs=2)

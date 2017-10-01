@@ -25,7 +25,7 @@ The purpose of this project is to investigate a type of Convolutional Neural Net
  * As I use win 10 OS system, to make the original repo run, you need to modify this line
 > [                filename = os.path.splitext(f.split("/")[-1])[0]](https://github.com/shekkizh/FCN.tensorflow/blob/27777723c62764fb69b031e79cfe8b50a80ca957/read_MITSceneParsingData.py#L54)
  
-		to 
+to 
 > filename = os.path.basename(f)[:-4]. 
 > 
 
